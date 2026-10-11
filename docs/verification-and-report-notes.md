@@ -160,8 +160,7 @@ All formulas are implemented in `calculator/services.py::calculate_salary()` and
 ## Actual Test Scenarios and Outcomes
 
 ### Automated Tests (Django Test Framework)
-- **23 Phase 1-2 tests**: All pass (11 service tests, 8 form validation tests, 4 model tests)
-- **5 ViewTests**: Errors due to Python 3.14/Django 5.0.14 test client incompatibility (`'super' object has no attribute 'dicts'`). This is a **known infrastructure issue**, not a code defect. The views and templates work correctly with manual/verification testing.
+- **28 automated tests**: All pass on Python 3.14.7 + Django 5.2.18. The five view-test errors previously seen with Django 5.0.14 were resolved by upgrading Django; no tests were skipped.
 - **URL route resolution**: All 7 named routes resolve correctly
 - **System check**: `python manage.py check` — no issues
 
@@ -175,12 +174,12 @@ All formulas are implemented in `calculator/services.py::calculate_salary()` and
 - **Payslip**: Renders for valid saved record; earnings and deduction amounts correct; estimate disclaimer visible; missing records return HTTP 404; print-specific CSS included in generated page
 - **Salary analysis**: Percentages computed correctly when gross salary positive; zero gross does not trigger division errors; negative net salary displays appropriate warning; accessible text labels alongside visual bars
 
-### Known Test Infrastructure Issue
-The Django test client has a compatibility issue with Python 3.14 (`AttributeError: 'super' object has no attribute 'dicts'`). This affects the 5 `ViewTests` that use `self.client.get()` or `self.client.post()`. All view functions work correctly with manual testing and the `RequestFactory` approach (with appropriate middleware setup). This was documented in Phase 2 and remains unchanged.
+### Resolved Test Infrastructure Issue
+The project originally used Django 5.0.14 with Python 3.14.7, causing Django's test client to fail while copying template contexts. Upgrading both project virtual environments to Django 5.2.18 resolved the failure. The verified full test suite now passes all 28 tests, and `python manage.py check` reports no issues.
 
 ## Remaining Limitations
 
-1. **Python 3.14 test client bug**: 5 view tests cannot run via `python manage.py test` due to Django 5.0.14 / Python 3.14 incompatibility. Manual verification confirms all functionality works.
+1. **Test-client compatibility issue (resolved)**: The Django 5.0.14 / Python 3.14 issue was resolved by upgrading to Django 5.2.18; all 28 calculator tests now pass.
 2. **No multi-user authentication**: Single-user local prototype; no auth system implemented (by design per Phase 1-3 scope).
 3. **No cloud deployment or external APIs**: Localhost-only application; no Docker, no Heroku, no external services.
 4. **No PDF generation**: Printable HTML preview only; no PDF library installed or required.
@@ -276,4 +275,4 @@ python manage.py runserver 0.0.0.0:8000
 
 ## Honest Assessment of Unverified Areas
 
-Due to the Django test client / Python 3.14 incompatibility, the 5 `ViewTests` cannot be run automatically. However, all view functions have been manually tested through the Django shell with `RequestFactory` and through the live development server. The verification confirms that all Phase 3 functionality works correctly in practice. The only remaining unverified area is the test client-dependent test execution, which is a known infrastructure limitation, not a code defect.
+The former Django test-client / Python 3.14 incompatibility is resolved by the upgrade to Django 5.2.18. All 28 tests run successfully. Phase 3 workflows were also reported as manually checked through the development server; keep screenshots and any new test evidence in sync with the final local verification.

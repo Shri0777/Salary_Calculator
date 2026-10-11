@@ -4,13 +4,14 @@ A Django-based salary calculation tool designed for college compensation class d
 
 ## Project Status
 
-**Phase 1 Complete**: Core calculation engine, forms, models, and comprehensive testing.
-**Phase 2 Complete**: Professional browser interface with dashboard, calculator form, results page, and responsive CSS.
+**Phase 1 Complete**: Core calculation engine, forms, models, and automated tests.
+**Phase 2 Complete**: Browser interface, calculator form, results page, and responsive CSS.
+**Phase 3 Features Implemented**: Saved salary history, record details, deletion, payslip preview, and CSS-based salary analysis.
 
 ## Technology Stack
 
 - Python 3.14.7
-- Django 5.0.14
+- Django 5.2.18
 - SQLite (development database)
 - Django Forms
 - Django ORM
@@ -259,7 +260,7 @@ python manage.py check
 python manage.py test calculator
 ```
 
-Expected output: `Ran 23 tests ... OK`
+Expected output: `Ran 28 tests ... OK`
 
 ### 5. Start Development Server
 
@@ -322,7 +323,7 @@ python manage.py test calculator.tests.SalaryCalculationServiceTests
 python manage.py test calculator --verbosity=2
 ```
 
-Expected output: `Ran 23 tests ... OK`
+Expected output: `Ran 28 tests ... OK`
 
 ## Running Tests
 
@@ -430,7 +431,7 @@ python manage.py test calculator.tests.SalaryCalculationServiceTests calculator.
 
 ### Phase 2 Tests
 
-Phase 2 view tests are written but encounter a Python 3.14 compatibility issue with Django 5.0.14's test client (AttributeError in context copying). This is a known Django framework bug, not an issue with the application code.
+The Django test-client issue previously observed with Python 3.14 and Django 5.0.14 was resolved by upgrading the project to Django 5.2.18. The complete calculator test suite now passes: 28 tests.
 
 **Manual Verification:**
 A manual verification script (`verify_phase2.py`) confirms all Phase 2 functionality works correctly:
@@ -443,28 +444,21 @@ A manual verification script (`verify_phase2.py`) confirms all Phase 2 functiona
 
 The application works correctly when accessed via the development server.
 
-## Known Issues
+## Compatibility Update
 
-### Python 3.14 + Django 5.0.14 Compatibility
+### Python 3.14 + Django test client (resolved)
 
-Django's test client has a compatibility issue with Python 3.14 related to the `super()` object changes. This affects only the test infrastructure, not the actual application. The views and templates work correctly when accessed through the browser or direct view calls.
+The project was upgraded from Django 5.0.14 to Django 5.2.18 to use a release line that supports Python 3.14. After the upgrade, `python manage.py check` reports no issues and `python manage.py test calculator --verbosity=1` passes all 28 tests. No test skips or application-level monkey patches were needed.
 
-**Impact**: View tests using Django's test client fail with `AttributeError: 'super' object has no attribute 'dicts'`.
+## Current Limitations
 
-**Workaround**: Use manual verification script or test via development server.
+- The prototype is designed for local, single-user demonstration; multi-user authentication is not implemented.
+- Payslips are printable HTML previews, not generated PDF files or official employer-issued payslips.
+- PF, professional tax, and income tax are manually entered estimates; statutory deductions are not calculated automatically.
+- The project has no cloud deployment or external API integration.
+- Annualized salary values assume the monthly figures remain constant for twelve months.
 
-## Phase 2 Limitations
-
-**Not Implemented (Future Phases):**
-- Salary history persistence and viewing
-- Payslip PDF generation
-- Charts or visualizations  
-- User authentication/authorization
-- Multi-user support
-- API endpoints
-- Deployment configuration
-
-Phase 2 focuses on the browser interface with no-JavaScript requirement.
+The complete prototype remains a local, single-user educational demonstration and uses no JavaScript.
 
 ## Development Guidelines
 
@@ -514,20 +508,17 @@ python manage.py test calculator.tests.TestClassName.test_method_name
 
 ## Version Information
 
-- Django: 5.0.14
+- Django: 5.2.18
 - Python: 3.14.7
 - Database: SQLite 3 (bundled with Python)
 
-## Next Steps (Phase 3 and Beyond)
+## Possible Future Enhancements
 
-Future phases could add:
-1. Salary history persistence and viewing
-2. Payslip PDF generation
-3. Charts and data visualizations
-4. User authentication and authorization
-5. Multi-user support
-6. REST API endpoints
-7. Deployment configuration
+1. Optional PDF export for the printable payslip.
+2. Additional automated tests for history, deletion, and payslip workflows.
+3. A tax-estimation module based on a clearly specified financial year and official rules.
+4. Authentication and multi-user permissions if the project scope expands beyond a local demonstration.
+5. Deployment configuration if remote access is required.
 
 ## License
 
@@ -535,4 +526,4 @@ Educational project for college demonstration purposes.
 
 ## Support
 
-This is a Phase 2 implementation. Refer to this README for setup and usage instructions.
+This is a locally hosted educational prototype. Refer to this README for setup, usage, and testing instructions.

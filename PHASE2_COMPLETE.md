@@ -153,10 +153,7 @@ Phase 2 of the Smart Salary Calculator project has been successfully completed. 
    - 4 model tests
 
 ### Phase 2 Tests
-⚠️ **Known Issue**: Django test client incompatible with Python 3.14
-   - Django 5.0.14 has a bug with Python 3.14's `super()` changes
-   - Test infrastructure fails, but **application code works correctly**
-   - Manual verification confirms all functionality works
+✅ **Resolved**: The original Python 3.14 test-client failure was caused by the project's Django 5.0.14 version. Both local virtual environments were upgraded to Django 5.2.18. The full test suite now passes all 28 tests, and `python manage.py check` reports no issues.
 
 ✅ **Manual Verification** (verify_phase2.py)
    - 6/6 tests pass
@@ -221,15 +218,13 @@ The following features were intentionally excluded from Phase 2:
 
 These remain available for future phases if needed.
 
-## Known Issues
+## Resolved Issue
 
-### Python 3.14 + Django 5.0.14 Test Client Bug
-- **Issue**: Django's test client fails with `AttributeError: 'super' object has no attribute 'dicts'`
-- **Impact**: View tests using `self.client.get()` or `self.client.post()` cannot run
-- **Root Cause**: Python 3.14 changed `super()` implementation; Django 5.0.14 is not yet compatible
-- **Workaround**: Manual verification script bypasses test client by calling views directly
-- **Application Status**: **Fully functional** - bug is in test infrastructure only
-- **Evidence**: Development server works correctly; manual tests pass; Phase 1 tests pass
+### Python 3.14 + Django test client
+- **Original issue**: Django 5.0.14 failed while copying template contexts in Django's test client under Python 3.14.
+- **Resolution**: Upgraded both local virtual environments and `requirements.txt` to Django 5.2.18.
+- **Verification**: `python manage.py check` passes and `python manage.py test calculator --verbosity=1` passes all 28 tests.
+- **Current status**: No workaround or test skip is required.
 
 ## Success Criteria Checklist
 

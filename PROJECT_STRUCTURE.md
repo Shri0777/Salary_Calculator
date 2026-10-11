@@ -7,7 +7,7 @@ Generated: Sunday, October 11, 2026
 ```
 Salary_Calculator/
 ├── manage.py                           # Django management command
-├── requirements.txt                    # Python dependencies (Django 5.0.14)
+├── requirements.txt                    # Python dependencies (Django 5.2.18)
 ├── db.sqlite3                          # SQLite database (created after migrate)
 │
 ├── README.md                           # Main documentation
@@ -48,13 +48,13 @@ Salary_Calculator/
 │       └── style.css                   # Green-and-white design system (561 lines)
 │
 └── venv/                               # Virtual environment (not in Git)
-    └── ...                             # Python 3.14.7 + Django 5.0.14
+    └── ...                             # Python 3.14.7 + Django 5.2.18
 ```
 
 ## File Sizes and Line Counts
 
 ### Configuration Files
-- `requirements.txt` - 2 dependencies (Django, sqlparse)
+- `requirements.txt` - 1 direct dependency (Django; its required dependencies are installed transitively)
 - `config/settings.py` - ~130 lines
 - `config/urls.py` - ~30 lines
 
@@ -220,7 +220,7 @@ urlpatterns = [
 - String representation
 - Ordering
 
-### Phase 2 Tests (5 tests) - Manual Verification Only ⚠️
+### Phase 2 View Tests (5 tests) - Automated and Passing
 
 **ViewTests** (5 tests)
 - Dashboard GET
@@ -229,13 +229,13 @@ urlpatterns = [
 - Calculator POST with invalid data
 - Negative net salary warning
 
-**Note**: Django test client has Python 3.14 compatibility issue. Manual verification script (`verify_phase2.py`) confirms all functionality works correctly.
+**Note**: The earlier Python 3.14 / Django 5.0.14 test-client issue is resolved by upgrading to Django 5.2.18. The full 28-test suite passes.
 
 ## Dependencies
 
 ### Python Packages (requirements.txt)
 ```
-Django==5.0.14
+Django==5.2.18
 sqlparse==0.5.2
 ```
 
@@ -418,7 +418,7 @@ Thumbs.db
 - Write tests for new features
 
 ### Known Limitations
-- Python 3.14 + Django 5.0.14 test client incompatibility
+- Earlier Python 3.14 / Django 5.0.14 test-client incompatibility (resolved by Django 5.2.18 upgrade)
 - No real-time validation (form submits for validation)
 - No JavaScript-based interactivity
 - Educational tool, not production payroll system
