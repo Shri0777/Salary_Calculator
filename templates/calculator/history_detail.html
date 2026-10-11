@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Calculation Details - Smart Salary Calculator{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Calculation Details</h1>
+    <p class="page-description">Saved salary calculation record</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="detail-section">
+            <h2 class="detail-section-header">💰 Earnings</h2>
+            <div class="details-list">
+                <div class="details-item">
+                    <span class="details-label">Basic Salary</span>
+                    <span class="details-value">₹{{ calc.basic_salary }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">House Rent Allowance (HRA)</span>
+                    <span class="details-value">₹{{ calc.hra }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Other Allowances</span>
+                    <span class="details-value">₹{{ calc.other_allowances }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Bonus and Overtime</span>
+                    <span class="details-value">₹{{ calc.bonus_overtime }}</span>
+                </div>
+                <hr style="margin: 1rem 0;">
+                <div class="details-item details-total">
+                    <span class="details-label">Gross Salary</span>
+                    <span class="details-value"><strong>₹{{ calc.gross_salary }}</strong></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-section" style="margin-top: 1.5rem;">
+            <h2 class="detail-section-header">📉 Deductions</h2>
+            <div class="details-list">
+                <div class="details-item">
+                    <span class="details-label">Provident Fund (PF)</span>
+                    <span class="details-value">₹{{ calc.pf_deduction }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Professional Tax</span>
+                    <span class="details-value">₹{{ calc.professional_tax }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Income Tax Estimate</span>
+                    <span class="details-value">₹{{ calc.income_tax_estimate }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Other Deductions</span>
+                    <span class="details-value">₹{{ calc.other_deductions }}</span>
+                </div>
+                <hr style="margin: 1rem 0;">
+                <div class="details-item details-total">
+                    <span class="details-label">Total Deductions</span>
+                    <span class="details-value"><strong>₹{{ calc.total_deductions }}</strong></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-section" style="margin-top: 1.5rem;">
+            <h2 class="detail-section-header">📊 Summary</h2>
+            <div class="details-list">
+                <div class="details-item">
+                    <span class="details-label">Net Monthly Salary</span>
+                    <span class="details-value {% if is_negative %}result-value-negative{% endif %}">₹{{ calc.net_salary }}</span>
+                </div>
+                
+                {% if calc.gross_salary > 0 %}
+                <div class="details-item">
+                    <span class="details-label">Annualized Gross Estimate</span>
+                    <span class="details-value">₹{{ annualized_gross }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Annualized Net Estimate</span>
+                    <span class="details-value">₹{{ annualized_net }}</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Deductions % of Gross</span>
+                    <span class="details-value">{{ total_deductions_pct }}%</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Net % of Gross</span>
+                    <span class="details-value">{{ net_pct_of_gross }}%</span>
+                </div>
+                {% else %}
+                <div class="details-item">
+                    <span class="details-label">Deductions % of Gross</span>
+                    <span class="details-value">N/A (zero gross salary)</span>
+                </div>
+                <div class="details-item">
+                    <span class="details-label">Net % of Gross</span>
+                    <span class="details-value">N/A (zero gross salary)</span>
+                </div>
+                {% endif %}
+                
+                {% if is_negative %}
+                <div class="details-item details-warning">
+                    <span class="details-label">⚠️ Warning</span>
+                    <span class="details-value">Net salary is negative (deductions exceed gross)</span>
+                </div>
+                {% endif %}
+                
+                <div class="details-item">
+                    <span class="details-label">Calculation Label</span>
+                    <span class="details-value">{{ calc.label|default:'(none)' }}</span>
+                </div>
+                
+                <div class="details-item">
+                    <span class="details-label">Created</span>
+                    <span class="details-value">{{ calc.created_at|date:"M d, Y H:i" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-body">
+        <h2 class="card-header">📄 Payslip Preview</h2>
+        <p>View a professional, printable payslip preview of this calculation.</p>
+        <a href="{% url 'payslip' calc_id=calc.id %}" class="btn btn-primary">Open Payslip Preview</a>
+        <a href="{% url 'history_detail' calc.id %}" class="btn btn-secondary" style="margin-left: 0.5rem;">Back to Details</a>
+    </div>
+</div>
+
+{% endblock %}

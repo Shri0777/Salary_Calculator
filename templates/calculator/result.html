@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Calculation Results - Smart Salary Calculator{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Salary Calculation Results</h1>
+    <p class="page-description">
+        Your monthly salary breakdown calculated with precise Decimal arithmetic.
+    </p>
+</div>
+
+{% if result.is_negative %}
+<div class="warning-banner">
+    <div class="warning-banner-icon">⚠️</div>
+    <div class="warning-banner-content">
+        <strong>Warning: Negative Net Salary</strong>
+        <p>Your total deductions (₹{{ result.total_deductions }}) exceed your gross salary (₹{{ result.gross_salary }}). 
+        This results in a negative take-home pay of ₹{{ result.net_salary }}. Please review your deduction amounts.</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="result-summary">
+    <div class="result-card result-card-highlight">
+        <div class="result-label">Net Salary (Monthly)</div>
+        <div class="result-value {% if result.is_negative %}result-value-negative{% endif %}">
+            ₹{{ result.net_salary }}
+        </div>
+        <div class="result-sublabel">Your Take-Home Pay</div>
+    </div>
+    
+    <div class="result-card">
+        <div class="result-label">Gross Salary</div>
+        <div class="result-value">₹{{ result.gross_salary }}</div>
+        <div class="result-sublabel">Total Monthly Earnings</div>
+    </div>
+    
+    <div class="result-card">
+        <div class="result-label">Total Deductions</div>
+        <div class="result-value">₹{{ result.total_deductions }}</div>
+        <div class="result-sublabel">Amount Deducted</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="card-header">💰 Earnings Breakdown</h2>
+    <div class="card-body">
+        <table class="breakdown-table">
+            <tbody>
+                <tr>
+                    <td class="breakdown-label">Basic Salary</td>
+                    <td class="breakdown-value">₹{{ result.basic_salary }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">House Rent Allowance (HRA)</td>
+                    <td class="breakdown-value">₹{{ result.hra }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Other Allowances</td>
+                    <td class="breakdown-value">₹{{ result.other_allowances }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Bonus and Overtime</td>
+                    <td class="breakdown-value">₹{{ result.bonus_overtime }}</td>
+                </tr>
+                <tr class="breakdown-total">
+                    <td class="breakdown-label"><strong>Gross Salary</strong></td>
+                    <td class="breakdown-value"><strong>₹{{ result.gross_salary }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="card-header">📉 Deductions Breakdown</h2>
+    <div class="card-body">
+        <table class="breakdown-table">
+            <tbody>
+                <tr>
+                    <td class="breakdown-label">Provident Fund (PF) Deduction</td>
+                    <td class="breakdown-value">₹{{ result.pf_deduction }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Professional Tax</td>
+                    <td class="breakdown-value">₹{{ result.professional_tax }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Income Tax Estimate</td>
+                    <td class="breakdown-value">₹{{ result.income_tax_estimate }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Other Deductions</td>
+                    <td class="breakdown-value">₹{{ result.other_deductions }}</td>
+                </tr>
+                <tr class="breakdown-total">
+                    <td class="breakdown-label"><strong>Total Deductions</strong></td>
+                    <td class="breakdown-value"><strong>₹{{ result.total_deductions }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="card-header">📊 Annualized Estimates</h2>
+    <div class="card-body">
+        <table class="breakdown-table">
+            <tbody>
+                <tr>
+                    <td class="breakdown-label">Annualized Gross Salary</td>
+                    <td class="breakdown-value">₹{{ result.annualized_gross }}</td>
+                </tr>
+                <tr>
+                    <td class="breakdown-label">Annualized Net Salary</td>
+                    <td class="breakdown-value {% if result.is_negative %}result-value-negative{% endif %}">
+                        ₹{{ result.annualized_net }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 1rem; color: var(--secondary-text); font-size: 0.875rem;">
+            Annualized estimates assume the same monthly salary structure throughout the year. 
+            These are estimates for planning purposes only.
+        </p>
+    </div>
+</div>
+
+<div class="action-buttons">
+    <form method="post" action="{% url 'save_calculation' %}" style="display: inline-block;">
+        {% csrf_token %}
+        <input type="hidden" name="basic_salary" value="{{ result.basic_salary }}">
+        <input type="hidden" name="hra" value="{{ result.hra }}">
+        <input type="hidden" name="other_allowances" value="{{ result.other_allowances }}">
+        <input type="hidden" name="bonus_overtime" value="{{ result.bonus_overtime }}">
+        <input type="hidden" name="pf_deduction" value="{{ result.pf_deduction }}">
+        <input type="hidden" name="professional_tax" value="{{ result.professional_tax }}">
+        <input type="hidden" name="income_tax_estimate" value="{{ result.income_tax_estimate }}">
+        <input type="hidden" name="other_deductions" value="{{ result.other_deductions }}">
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--main-text);">Calculation Label (optional)</label>
+        <input type="text" name="label" value="" style="width: 200px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 0.5rem;">
+        <button type="submit" class="btn btn-primary">💾 Save Calculation</button>
+    </form>
+    <a href="{% url 'calculator' %}" class="btn btn-secondary">Calculate Again</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="disclaimer">
+    <p class="disclaimer-title">📌 Important</p>
+    <p>
+        This is an educational estimation tool. Results are based on the values you provided 
+        and do not constitute financial or tax advice. Actual take-home pay may vary based on 
+        employer policies, statutory compliance requirements, and other factors.
+    </p>
+</div>
+{% endblock %}

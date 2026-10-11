@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Smart Salary Calculator{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Smart Salary Calculator</h1>
+    <p class="page-description">
+        A precise salary calculation tool designed for educational demonstrations. 
+        Calculate gross salary, deductions, and take-home pay with accuracy.
+    </p>
+</div>
+
+{% if num_calculations > 0 %}
+    <div class="overview-cards">
+        <div class="overview-card">
+            <div class="overview-card-icon">💰</div>
+            <h3 class="overview-card-title">Saved Calculations</h3>
+            <p class="overview-card-description">
+                {{ num_calculations }} calculation{{ num_calculations|pluralize }} saved
+            </p>
+        </div>
+        
+        <div class="overview-card">
+            <div class="overview-card-icon">📅</div>
+            <h3 class="overview-card-title">Latest Calculation</h3>
+            <p class="overview-card-description">
+                {{ latest_calculation.created_at|date:"F j, Y" }}
+            </p>
+        </div>
+        
+        <div class="overview-card">
+            <div class="overview-card-icon">💵</div>
+            <h3 class="overview-card-title">Latest Gross</h3>
+            <p class="overview-card-description">₹{{ latest_gross }}</p>
+        </div>
+        
+        <div class="overview-card">
+            <div class="overview-card-icon">💳</div>
+            <h3 class="overview-card-title">Latest Net</h3>
+            <p class="overview-card-description">₹{{ latest_net }}</p>
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'history' %}" class="btn btn-primary">View Full History</a>
+    </div>
+{% else %}
+    <div class="card" style="text-align: center; padding: 3rem;">
+        <h2 style="color: var(--dark-green); margin-bottom: 1rem;">Ready to Calculate?</h2>
+        <p style="color: var(--secondary-text); margin-bottom: 1.5rem;">
+            Enter your monthly earnings and deductions to get a detailed salary breakdown.
+            Your calculations will be saved to history for future reference.
+        </p>
+        <a href="{% url 'calculator' %}" class="btn btn-primary btn-large">Calculate Salary</a>
+    </div>
+
+    <h2 style="font-size: 1.5rem; font-weight: 600; color: var(--dark-green); margin: 2rem 0 1rem;">
+        Understanding Salary Components
+    </h2>
+
+    <div class="overview-cards">
+        <div class="overview-card">
+            <div class="overview-card-icon">💰</div>
+            <h3 class="overview-card-title">Gross Salary</h3>
+            <p class="overview-card-description">
+                Your total monthly earnings before any deductions. Includes basic salary, 
+                HRA, allowances, and bonuses.
+            </p>
+        </div>
+        
+        <div class="overview-card">
+            <div class="overview-card-icon">📉</div>
+            <h3 class="overview-card-title">Deductions</h3>
+            <p class="overview-card-description">
+                Amounts deducted from your gross salary, including PF, professional tax, 
+                income tax estimates, and other deductions.
+            </p>
+        </div>
+        
+        <div class="overview-card">
+            <div class="overview-card-icon">✅</div>
+            <h3 class="overview-card-title">Net Salary</h3>
+            <p class="overview-card-description">
+                Your take-home pay after all deductions. This is the amount that gets 
+                deposited into your bank account.
+            </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="card-header">How It Works</h3>
+        <div class="card-body">
+            <ol style="padding-left: 1.5rem; line-height: 1.8;">
+                <li><strong>Enter Earnings:</strong> Provide your basic salary and any allowances (HRA, bonuses, etc.)</li>
+                <li><strong>Add Deductions:</strong> Enter your monthly deductions like PF, professional tax, and income tax</li>
+                <li><strong>Calculate:</strong> Our tool uses precise Decimal arithmetic to compute your salary breakdown</li>
+                <li><strong>Review Results:</strong> See your gross salary, total deductions, net salary, and annualized estimates</li>
+                <li><strong>Save:</strong> Save any calculation to history for future reference</li>
+            </ol>
+        </div>
+    </div>
+{% endif %}
+
+<div class="disclaimer">
+    <p class="disclaimer-title">⚠️ Important Notice</p>
+    <p>
+        This is an <strong>educational estimation tool</strong> for demonstration purposes. 
+        It does not automatically calculate statutory deductions based on tax slabs or PF percentages. 
+        You must manually enter deduction amounts. This tool is <strong>not</strong> a statutory 
+        payroll compliance system.
+    </p>
+    <p style="margin-top: 0.75rem;">
+        Annualized estimates assume the same monthly salary structure throughout the year and 
+        are for planning purposes only.
+    </p>
+</div>
+{% endblock %}

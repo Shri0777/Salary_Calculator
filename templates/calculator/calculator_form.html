@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block title %}Calculate Salary - Smart Salary Calculator{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Salary Calculator</h1>
+    <p class="page-description">
+        Enter your monthly earnings and deductions to calculate your net salary. 
+        All values should be monthly amounts in Indian Rupees (₹).
+    </p>
+</div>
+
+{% if form.non_field_errors %}
+<div class="form-errors">
+    <strong>Please correct the following errors:</strong>
+    {{ form.non_field_errors }}
+</div>
+{% endif %}
+
+<form method="post" action="{% url 'calculator' %}">
+    {% csrf_token %}
+    
+    <div class="card">
+        <h2 class="form-section-header">💰 Monthly Earnings</h2>
+        
+        <div class="form-group">
+            <label for="{{ form.basic_salary.id_for_label }}" class="form-label required">
+                {{ form.basic_salary.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.basic_salary.name }}" 
+                       id="{{ form.basic_salary.id_for_label }}"
+                       value="{{ form.basic_salary.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="25000.00"
+                       class="form-input currency-input"
+                       required>
+            </div>
+            {% if form.basic_salary.help_text %}
+            <span class="form-help">{{ form.basic_salary.help_text }}</span>
+            {% endif %}
+            {% if form.basic_salary.errors %}
+            <ul class="errorlist">
+                {% for error in form.basic_salary.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.hra.id_for_label }}" class="form-label">
+                {{ form.hra.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.hra.name }}" 
+                       id="{{ form.hra.id_for_label }}"
+                       value="{{ form.hra.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.hra.help_text %}
+            <span class="form-help">{{ form.hra.help_text }}</span>
+            {% endif %}
+            {% if form.hra.errors %}
+            <ul class="errorlist">
+                {% for error in form.hra.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.other_allowances.id_for_label }}" class="form-label">
+                {{ form.other_allowances.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.other_allowances.name }}" 
+                       id="{{ form.other_allowances.id_for_label }}"
+                       value="{{ form.other_allowances.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.other_allowances.help_text %}
+            <span class="form-help">{{ form.other_allowances.help_text }}</span>
+            {% endif %}
+            {% if form.other_allowances.errors %}
+            <ul class="errorlist">
+                {% for error in form.other_allowances.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.bonus_overtime.id_for_label }}" class="form-label">
+                {{ form.bonus_overtime.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.bonus_overtime.name }}" 
+                       id="{{ form.bonus_overtime.id_for_label }}"
+                       value="{{ form.bonus_overtime.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.bonus_overtime.help_text %}
+            <span class="form-help">{{ form.bonus_overtime.help_text }}</span>
+            {% endif %}
+            {% if form.bonus_overtime.errors %}
+            <ul class="errorlist">
+                {% for error in form.bonus_overtime.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2 class="form-section-header">📉 Monthly Deductions</h2>
+        
+        <div class="form-group">
+            <label for="{{ form.pf_deduction.id_for_label }}" class="form-label">
+                {{ form.pf_deduction.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.pf_deduction.name }}" 
+                       id="{{ form.pf_deduction.id_for_label }}"
+                       value="{{ form.pf_deduction.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.pf_deduction.help_text %}
+            <span class="form-help">{{ form.pf_deduction.help_text }}</span>
+            {% endif %}
+            {% if form.pf_deduction.errors %}
+            <ul class="errorlist">
+                {% for error in form.pf_deduction.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.professional_tax.id_for_label }}" class="form-label">
+                {{ form.professional_tax.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.professional_tax.name }}" 
+                       id="{{ form.professional_tax.id_for_label }}"
+                       value="{{ form.professional_tax.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.professional_tax.help_text %}
+            <span class="form-help">{{ form.professional_tax.help_text }}</span>
+            {% endif %}
+            {% if form.professional_tax.errors %}
+            <ul class="errorlist">
+                {% for error in form.professional_tax.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.income_tax_estimate.id_for_label }}" class="form-label">
+                {{ form.income_tax_estimate.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.income_tax_estimate.name }}" 
+                       id="{{ form.income_tax_estimate.id_for_label }}"
+                       value="{{ form.income_tax_estimate.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.income_tax_estimate.help_text %}
+            <span class="form-help">{{ form.income_tax_estimate.help_text }}</span>
+            {% endif %}
+            {% if form.income_tax_estimate.errors %}
+            <ul class="errorlist">
+                {% for error in form.income_tax_estimate.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.other_deductions.id_for_label }}" class="form-label">
+                {{ form.other_deductions.label }}
+            </label>
+            <div class="currency-input-wrapper">
+                <input type="number" 
+                       name="{{ form.other_deductions.name }}" 
+                       id="{{ form.other_deductions.id_for_label }}"
+                       value="{{ form.other_deductions.value|default:'' }}"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00"
+                       class="form-input currency-input">
+            </div>
+            {% if form.other_deductions.help_text %}
+            <span class="form-help">{{ form.other_deductions.help_text }}</span>
+            {% endif %}
+            {% if form.other_deductions.errors %}
+            <ul class="errorlist">
+                {% for error in form.other_deductions.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <button type="submit" class="btn btn-primary btn-large">Calculate Salary</button>
+        <a href="{% url 'calculator' %}" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<div class="disclaimer" style="margin-top: 2rem;">
+    <p class="disclaimer-title">💡 Note</p>
+    <p>
+        All values should be entered as monthly amounts. The calculator will compute your 
+        monthly net salary and provide annualized estimates. Deduction amounts must be entered 
+        manually—this tool does not calculate tax slabs or PF percentages automatically.
+    </p>
+</div>
+{% endblock %}
